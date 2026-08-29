@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applying Functional Programming Principles — Lecture 1</title>
+<style>
+  :root {
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --text: #172033;
+    --muted: #5d6b82;
+    --accent: #4f46e5;
+    --accent-soft: #eef2ff;
+    --border: #e5e9f2;
+    --code-bg: #111827;
+    --shadow: 0 12px 35px rgba(23, 32, 51, .08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.7;
+  }
+  .page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 22px 60px;
+  }
+  .hero {
+    background: linear-gradient(135deg, #312e81, #4f46e5 55%, #6366f1);
+    color: white;
+    border-radius: 24px;
+    padding: 48px 46px;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: .78rem;
+    font-weight: 700;
+    opacity: .8;
+  }
+  h1 { font-size: 2.5rem; line-height: 1.15; margin: 12px 0 10px; }
+  .subtitle { font-size: 1.25rem; opacity: .9; margin: 0; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 30px 34px;
+    margin: 20px 0;
+    box-shadow: 0 5px 20px rgba(23,32,51,.04);
+  }
+  h2 {
+    font-size: 1.65rem;
+    margin: 0 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 { margin-top: 25px; }
+  p { margin: 12px 0; }
+  blockquote {
+    margin: 20px 0;
+    padding: 18px 22px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 10px 10px 0;
+    font-weight: 600;
+  }
+  pre {
+    background: var(--code-bg);
+    color: #e5e7eb;
+    padding: 18px 20px;
+    border-radius: 12px;
+    overflow-x: auto;
+    font-size: .92rem;
+    line-height: 1.55;
+  }
+  code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+  p code, li code {
+    background: #f0f2f7;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: .92em;
+  }
+  .diagram {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    white-space: pre-wrap;
+    margin: 18px 0;
+  }
+  .tip {
+    border-left: 4px solid #10b981;
+    background: #ecfdf5;
+    padding: 16px 20px;
+    border-radius: 0 10px 10px 0;
+  }
+  ul { padding-left: 25px; }
+  .takeaway {
+    display: grid;
+    gap: 12px;
+  }
+  .takeaway div {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px 18px;
+  }
+  .next {
+    background: #111827;
+    color: white;
+    border-radius: 18px;
+    padding: 28px 32px;
+    margin-top: 28px;
+  }
+  .next h2 { border: 0; margin-bottom: 8px; }
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: .85rem;
+    margin-top: 30px;
+  }
+  @media (max-width: 650px) {
+    .page { margin: 20px auto; }
+    .hero { padding: 34px 25px; border-radius: 18px; }
+    h1 { font-size: 2rem; }
+    .card { padding: 24px 22px; }
+  }
+  @media print {
+    body { background: white; }
+    .page { max-width: none; margin: 0; padding: 0; }
+    .hero, .card, .next { box-shadow: none; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <div class="eyebrow">Functional Programming • Lecture 01</div>
+    <h1>Why Functional Programming Matters</h1>
+    <p class="subtitle">Applying Functional Programming Principles</p>
+  </header>
+
+  <section class="card">
+    <h2>1. Introduction</h2>
+    <p>Functional programming (FP) is a programming paradigm that emphasizes <strong>functions, explicit data flow, immutability, and minimizing side effects</strong>.</p>
+    <p>The goal is not necessarily to write an entire application in a purely functional style.</p>
+    <p>Instead, the important goal is to <strong>learn functional programming deeply enough that you can apply its principles to other programming paradigms</strong>, including Object-Oriented Programming (OOP).</p>
+    <blockquote>Given the same input, a function should consistently produce the same output.</blockquote>
+  </section>
+
+  <section class="card">
+    <h2>2. Two Ways of Thinking About Code</h2>
+    <h3>Imperative / Mutable approach</h3>
+    <pre><code>var price = 100
+var discount = 20
+
+price = price - discount</code></pre>
+    <p>Here, <code>price</code> changes. Initially it is <code>100</code>, then it becomes <code>80</code>. The program relies on the current state of the variable.</p>
+
+    <h3>Functional approach</h3>
+    <pre><code>func finalPrice(price: Int, discount: Int) -> Int {
+    return price - discount
+}
+
+let result = finalPrice(price: 100, discount: 20)</code></pre>
+    <p>The result is <code>80</code>. The function doesn't modify external state. It simply takes inputs and produces an output.</p>
+    <div class="diagram">Input
+  ↓
+Function
+  ↓
+Output</div>
+  </section>
+
+  <section class="card">
+    <h2>3. The Problem With Hidden State</h2>
+    <pre><code>var discount = 20
+
+func finalPrice(price: Int) -> Int {
+    return price - discount
+}</code></pre>
+    <p>At first, <code>finalPrice(price: 100)</code> produces <code>80</code>.</p>
+    <p>But if another part of the application executes:</p>
+    <pre><code>discount = 50</code></pre>
+    <p>the same function call now produces <code>50</code>.</p>
+    <p>The function itself hasn't changed. However, its result changed because it depends on an <strong>external mutable variable</strong>.</p>
+    <div class="tip"><strong>Key idea:</strong> The function appears to need only <code>price</code>, but actually also depends on <code>discount</code>. This is a hidden dependency.</div>
+  </section>
+
+  <section class="card">
+    <h2>4. Why Mutable State Causes Bugs</h2>
+    <p>Imagine a real application containing:</p>
+    <div class="diagram">User
+Cart
+Product
+Payment
+Discount
+Shipping
+Order</div>
+
+    <p>Suppose the cart contains mutable properties:</p>
+    <pre><code>class Cart {
+    var total: Double = 0
+    var discount: Double = 0
+    var shipping: Double = 0
+}</code></pre>
+
+    <p>Different parts of the application might modify them:</p>
+    <pre><code>cart.total = 1000
+cart.discount = 100
+cart.shipping = 60
+
+cart.total = cart.total - cart.discount</code></pre>
+
+    <p>If the expected result is <code>960</code> but the application produces something else, you may need to investigate:</p>
+    <ul>
+      <li>Who changed <code>total</code>?</li>
+      <li>Who changed <code>discount</code>?</li>
+      <li>When did they change it?</li>
+      <li>In what order?</li>
+      <li>Was something changed twice?</li>
+      <li>Did another component modify the cart?</li>
+      <li>Was stale state used?</li>
+    </ul>
+    <p>The problem isn't necessarily one bad calculation. The problem is that <strong>many parts of the application can change shared state</strong>.</p>
+  </section>
+
+  <section class="card">
+    <h2>5. Functional Programming Changes the Design</h2>
+    <p>Instead of having many objects modifying shared state, we can move toward small functions that transform explicit inputs into outputs.</p>
+    <pre><code>func calculateTotal(
+    subtotal: Double,
+    discount: Double,
+    shipping: Double
+) -> Double {
+    subtotal - discount + shipping
+}</code></pre>
+
+    <pre><code>calculateTotal(
+    subtotal: 1000,
+    discount: 100,
+    shipping: 60
+)
+
+// 960</code></pre>
+
+    <p>The function doesn't need to modify a <code>Cart</code>. It simply calculates a value from the information given to it.</p>
+  </section>
+
+  <section class="card">
+    <h2>6. Command vs Calculation</h2>
+
+    <h3>Command</h3>
+    <pre><code>cart.total = cart.total - cart.discount</code></pre>
+    <p>This essentially says:</p>
+    <blockquote>Change the object's state.</blockquote>
+
+    <h3>Calculation</h3>
+    <pre><code>let newTotal = calculateTotal(
+    subtotal: cart.total,
+    discount: cart.discount,
+    shipping: cart.shipping
+)</code></pre>
+    <p>This says:</p>
+    <blockquote>Given these inputs, calculate a result.</blockquote>
+
+    <p>The original values aren't modified by the function. This makes the calculation easier to reason about and test.</p>
+  </section>
+
+  <section class="card">
+    <h2>7. Why Pure Calculations Are Easier to Understand</h2>
+    <pre><code>let total = calculateTotal(
+    subtotal: 1000,
+    discount: 100,
+    shipping: 60
+)</code></pre>
+
+    <p>To understand the result, you only need to understand <code>calculateTotal()</code>.</p>
+    <div class="diagram">1000 - 100 + 60
+       ↓
+      960</div>
+    <p>You don't need to investigate the entire application. This is one of the major benefits of functional programming.</p>
+  </section>
+
+  <section class="card">
+    <h2>8. Referential Transparency</h2>
+    <p>A key concept in functional programming is <strong>referential transparency</strong>.</p>
+    <p>For now, use this simplified definition:</p>
+    <blockquote>A function is referentially transparent when it can consistently be replaced by its result without changing the program's behavior.</blockquote>
+
+    <pre><code>func add(_ a: Int, _ b: Int) -> Int {
+    a + b
+}
+
+add(10, 20)
+// 30</code></pre>
+
+    <p>Because it always produces <code>30</code>, this:</p>
+    <pre><code>let result = add(10, 20)</code></pre>
+    <p>is effectively equivalent to:</p>
+    <pre><code>let result = 30</code></pre>
+  </section>
+
+  <section class="card">
+    <h2>9. Mutable State Breaks This Property</h2>
+    <pre><code>var taxRate = 0.15
+
+func calculateTax(price: Double) -> Double {
+    return price * taxRate
+}</code></pre>
+
+    <p>Initially, <code>calculateTax(price: 100)</code> returns <code>15</code>.</p>
+    <p>But after:</p>
+    <pre><code>taxRate = 0.20</code></pre>
+    <p>the exact same function call returns <code>20</code>.</p>
+
+    <p>The input appears to be the same, but the result changed because the function secretly depends on <code>taxRate</code> outside its parameters.</p>
+  </section>
+
+  <section class="card">
+    <h2>10. Make Dependencies Explicit</h2>
+    <pre><code>func calculateTax(
+    price: Double,
+    taxRate: Double
+) -> Double {
+    price * taxRate
+}</code></pre>
+
+    <p>Now:</p>
+    <pre><code>calculateTax(
+    price: 100,
+    taxRate: 0.15
+)
+
+// 15</code></pre>
+
+    <p>and:</p>
+    <pre><code>calculateTax(
+    price: 100,
+    taxRate: 0.20
+)
+
+// 20</code></pre>
+
+    <p>The dependency is now <strong>explicit</strong>.</p>
+    <div class="tip"><strong>Central principle:</strong> Prefer explicit dependencies over hidden dependencies.</div>
+  </section>
+
+  <section class="card">
+    <h2>11. Functional Programming Does Not Mean "Never Change Anything"</h2>
+    <p>Functional programming does <strong>not</strong> mean:</p>
+    <blockquote>Never use variables.</blockquote>
+
+    <p>Instead:</p>
+    <blockquote>Avoid unnecessary mutable state and isolate unavoidable side effects.</blockquote>
+
+    <p>Real applications inevitably interact with the outside world. For example, an iOS application might do:</p>
+    <div class="diagram">User taps button
+       ↓
+Network request
+       ↓
+Server responds
+       ↓
+Data changes
+       ↓
+UI updates</div>
+
+    <p>These interactions involve state and side effects. The goal isn't to eliminate them completely. Instead, we try to keep them controlled and separate from pure logic.</p>
+  </section>
+
+  <section class="card">
+    <h2>12. The Bigger Design Idea</h2>
+
+    <h3>Move away from:</h3>
+    <div class="diagram">Many objects
+      ↓
+Many mutable properties
+      ↓
+Many methods modifying them
+      ↓
+Hidden dependencies
+      ↓
+Hard-to-reproduce bugs</div>
+
+    <h3>Move toward:</h3>
+    <div class="diagram">Data
+ ↓
+Small Function
+ ↓
+New Data
+ ↓
+Small Function
+ ↓
+Result</div>
+
+    <p>This can provide:</p>
+    <ul>
+      <li>Fewer hidden dependencies</li>
+      <li>Easier testing</li>
+      <li>Easier debugging</li>
+      <li>Easier reasoning</li>
+      <li>Better separation of responsibilities</li>
+      <li>Greater referential transparency</li>
+      <li>Fewer accidental interactions between components</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>13. A Functional Programmer's Mental Model</h2>
+
+    <h3>Question 1 — What does this function need to know?</h3>
+    <p>Ideally, the answer should be:</p>
+    <div class="diagram">Its parameters</div>
+    <p>rather than global variables, singletons, mutable properties, external objects, or hidden state.</p>
+
+    <h3>Question 2 — Does this function change something outside itself?</h3>
+    <p>If yes, it may have a <strong>side effect</strong>. We will study side effects in a later lecture.</p>
+
+    <h3>Question 3 — If I give it the same inputs twice, will I definitely get the same result?</h3>
+    <p>If yes, you're moving toward functional programming.</p>
+  </section>
+
+  <section class="card">
+    <h2>14. Mental Exercise</h2>
+    <pre><code>var taxRate = 0.15
+
+func calculateTax(price: Double) -> Double {
+    return price * taxRate
+}</code></pre>
+
+    <p><strong>Question:</strong> Is this function behaving like a good functional function?</p>
+
+    <p>The function receives <code>price</code>, but its result also depends on <code>taxRate</code>, which exists outside the function.</p>
+
+    <p>Therefore, <code>calculateTax(100)</code> could produce <code>15</code> or <code>20</code> depending on the current state of <code>taxRate</code>.</p>
+
+    <p>A more functional design is:</p>
+    <pre><code>func calculateTax(
+    price: Double,
+    taxRate: Double
+) -> Double {
+    price * taxRate
+}</code></pre>
+
+    <p>Now the function's dependency is explicit.</p>
+  </section>
+
+  <section class="card">
+    <h2>15. Core Takeaways</h2>
+    <div class="takeaway">
+      <div><strong>1. Mutable state creates hidden dependencies.</strong><br>External mutable state makes code harder to reason about.</div>
+      <div><strong>2. Prefer explicit inputs.</strong><br>Pass dependencies into functions rather than having functions secretly obtain them.</div>
+      <div><strong>3. Prefer calculations over unnecessary mutations.</strong><br>When appropriate, calculate and return new values instead of changing existing state.</div>
+      <div><strong>4. Functional programming is a way of thinking.</strong><br>You don't have to abandon OOP. Make your OOP code more functional by increasing explicit data flow and reducing unnecessary mutation.</div>
+    </div>
+  </section>
+
+  <section class="next">
+    <h2>Final Mental Model</h2>
+    <div class="diagram" style="background:#1f2937;border-color:#374151;color:#fff;">FUNCTIONAL THINKING
+
+Data
+ ↓
+Explicit Inputs
+ ↓
+Function
+ ↓
+Output</div>
+    <p>The more your code can follow this model, the easier it generally becomes to understand, test, debug, and maintain.</p>
+
+    <h2>Next Lecture</h2>
+    <p><strong>Lecture 2 — Mutable State: The Root of Many Bugs</strong></p>
+    <p>We will learn what <strong>state</strong> actually is, what <strong>mutation</strong> means, why shared mutable state becomes dangerous, and how this appears in real Swift/iOS code.</p>
+  </section>
+
+  <div class="footer">Applying Functional Programming Principles • Lecture 1</div>
+</div>
+</body>
+</html>
